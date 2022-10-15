@@ -1,5 +1,9 @@
 ### Creating a serve container to serve a static web application using node|JS
-create a file display
+create a folder display
 ```
-touch display
+mkdir display
 ``
+Inside display create text file conten.txt
+```
+touch display/content.txt
+```
