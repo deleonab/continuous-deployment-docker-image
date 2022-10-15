@@ -35,3 +35,23 @@ kindest/node                      sigs.k8s.io/kind node image                   
 bitnami/node                      Bitnami Node.js Docker Image                    66                   [OK]     
 cimg/node                         The CircleCI Node.js Docker Convenience Imag…   13
 ```
+
+Create Dockerfile
+- install latest node
+FROM node:latest
+- run command to install serve package globally(-g)
+RUN npm install -g serve
+- copy file and contents into container
+COPY ./display/ ./dislplay
+
+- run the serve application in specified directory
+
+CMD serve ./display
+The Docker file will now look lik e that below 
+```
+FROM node:latest
+RUN npm install -g serve
+COPY ./display ./display
+CMD serve ./display
+
+```
