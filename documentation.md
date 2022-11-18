@@ -214,6 +214,11 @@ clip < ~/.ssh/id_ed25519.pub
 ssh-ed25519 Axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx deles@DESKTOP-PURLK18
 
 ```
+### Add SSH key to git 
+
+### Push code to git via SSH not http
 
 git init 
 git add remote origin git@github.com:deleonab/continuous-deployment-docker-serve-image.git
+git commit
+git push origin main
