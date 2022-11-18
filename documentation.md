@@ -110,3 +110,110 @@ docker run -p 3001:3000 --name=serve-container serve-image
 $ docker run -p 3001:3000 --name=serve-container serve-image
 INFO: Accepting connections at http://localhost:3000.
 ```
+
+### NOW WE SHALL PUSH OUR CONTAINER IMAGE TO DOCKER HUB
+
+- We shall start by running Docker Login with docker username and password
+```
+docker login
+```
+
+```
+$ docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: deleonabowu
+Password: 
+Login Succeeded
+```
+
+#### Next we shall build our docker image
+
+```
+docker build . -t deleonabowu/serve_image 
+```
+
+### Then we shall push the image to dockerhub
+
+```
+docker push deleonabowu/serve_image 
+```
+```
+$ docker push deleonabowu/serve_image
+Using default tag: latest
+The push refers to repository [docker.io/deleonabowu/serve_image]
+936d43cd91d5: Pushed
+7c322f3d99a0: Pushed
+a0e83da8ee49: Mounted from library/node
+797d12bcfeb4: Mounted from library/node
+8ca8a587d4f0: Mounted from library/node
+158b630f9dde: Mounted from library/node
+397a239a053b: Mounted from library/node
+89c3244a87b2: Mounted from library/node
+80231db1194c: Mounted from library/node
+f1c1f2298584: Mounted from library/node
+ccba29d69370: Mounted from library/node
+latest: digest: sha256:1b0ec48706ca06b0df5e0ebd35920fd943930c5df0b6c741af190e80fefb68cb size: 2633
+```
+
+![dockerhub1](./images/dockerhub1.PNG)
+
+### Now that we have pushed it to dockerhub, we can use it from any docker machine
+
+- I wll delete from the local machine $ docker rmi   3d69(part of image id)
+```
+$ docker rmi 3d69
+```
+### Now that it has been removed, we can run it as docker will check dockerhub if not found locally.
+
+```
+docker run -p=3001:3000 deleonabowu/serve_image
+```
+```
+$ docker run -p=3001:3000 deleonabowu/serve_image
+Unable to find image 'deleonabowu/serve_image:latest' locally
+latest: Pulling from deleonabowu/serve_image
+a8ca11554fce: Already exists
+e4e46864aba2: Already exists
+c85a0be79bfb: Already exists
+195ea6a58ca8: Already exists
+157f16ed0a0c: Already exists
+3745f00fc1cc: Already exists
+5bbc49fd3a32: Already exists
+bf8c7ae7c46e: Already exists
+dc0e02f1aec6: Already exists
+9a55986f0f8a: Already exists
+101db3d8a0d3: Already exists
+Digest: sha256:1b0ec48706ca06b0df5e0ebd35920fd943930c5df0b6c741af190e80fefb68cb
+Status: Downloaded newer image for deleonabowu/serve_image:latest
+ INFO  Accepting connections at http://localhost:3000
+```
+
+
+
+
+![dockerhub1](./images/browser1.PNG)
+
+### I will create a new repository in github called continuous-deployment-docker-image
+
+### I will generate an SSH key to add to github to make automation easier
+
+```
+ssh-keygen -t ed25519 -C "delesodade@hotmail.com"
+```
+
+```
+eval "$(ssh-agent -s)"
+```
+
+```
+clip < ~/.ssh/id_ed25519.pub
+
+```
+```
+
+ssh-ed25519 Axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx deles@DESKTOP-PURLK18
+
+```
+
+git init 
+git add remote origin git@github.com:deleonab/continuous-deployment-docker-serve-image.git
