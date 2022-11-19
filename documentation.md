@@ -222,3 +222,17 @@ git init
 git add remote origin git@github.com:deleonab/continuous-deployment-docker-serve-image.git
 git commit
 git push origin main
+
+
+#### Now, we need to set up actions for the git repository using the github actions tab
+
+- Acions > Docker Image > Configure
+
+![Git Configure docker image](./images/dockerhub2.PNG)
+
+###  Configure
+
+![Git Configure docker image](./images/dockerhub3.PNG)
+
+- Start commit > Commit new file
+
