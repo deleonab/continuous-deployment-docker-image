@@ -373,5 +373,80 @@ Merge made by the 'ort' strategy.
 
  #### We however still need to authenticate when pushed to AWS and also to tag the image
 
- 
+ #### Here is the updated docker-image.yml file
+ ```
+name: Docker Image CD
 
+on:
+  push:
+    branches: [ "main" ]
+  
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout the dockerfile code
+      uses: actions/checkout@v3
+
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+       aws-access-key-id: AKIASWLIU2NL5EHL73YA
+       aws-secret-access-key: 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
+       aws-region: us-east-1
+
+    - name: Log into ECR
+      run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/c8v1l0n9
+
+    - name: Build, tag and push the Docker image
+      run: |
+        docker build . -t deleonabowu/continuous-serve-image
+        docker tag deleonabowu/continuous-serve-image:latest public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+        docker push public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+ ```
+
+#### We need to avoid displaying our secrets publicly in github. 
+ - We shall create new repository secrets by going to actions/security 
+
+- AWS_ACCESS_KEY_ID  :  AKIASWLIU2NL5EHL73YA
+- AWS_SECRET_ACCESS_KEY : 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
+
+#### docker-image.yml now looks like this:
+
+```
+name: Docker Image CD
+
+on:
+  push:
+    branches: [ "main" ]
+  
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout the dockerfile code
+      uses: actions/checkout@v3
+
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+       aws-access-key-id: {{secrets.AWS_ACCESS_KEY_ID}}
+       aws-secret-access-key: {{secrets.AWS_SECRET_ACCESS_KEY}}
+       aws-region: us-east-1
+
+    - name: Log into ECR
+      run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/c8v1l0n9
+
+    - name: Build, tag and push the Docker image
+      run: |
+        docker build . -t deleonabowu/continuous-serve-image
+        docker tag deleonabowu/continuous-serve-image:latest public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+        docker push public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+
+```
