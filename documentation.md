@@ -365,3 +365,13 @@ Merge made by the 'ort' strategy.
  1 file changed, 17 insertions(+)
  create mode 100644 .github/workflows/docker-image.yml
  ```
+
+ #### Let us noe edit the docker-image.yml file locally. We already have 2 steps
+
+ - One to checkout the code base
+ - To build out container image
+
+ #### We however still need to authenticate when pushed to AWS and also to tag the image
+
+ 
+
