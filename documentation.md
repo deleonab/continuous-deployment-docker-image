@@ -237,3 +237,131 @@ git push origin main
 - Start commit > Commit new file
 
 docker-image.yml created in continuous-deployment-docker-serve-image/.github/workflows/
+
+![Git Configure docker image](./images/dockerhub4.PNG)
+
+
+#### Next, we need to gain access to our container registry
+
+We shall use Amazon ECR instead of Dockerhub as our container registry as docker hub isn't free. Amazon has a free tier.
+
+
+#### I will go to Amazon ECR and create a public repository
+- Log into AWS
+- Go to ECR
+- Select   public   tab
+- Click create repository
+
+- check public radio button selected
+- Give repository name. I gave it deleonabowu/continuous-serve-image
+- You may leave other settings as is
+- Click create repository
+
+![Rpository created successfully](./images/dockerhub5.PNG)
+
+
+- Repositorycreated succesfully
+
+#### I will now create an IAM user for the registry;
+- I created an IAM user ECRAdministrator and granted only programatic access. I assigned the user to the administrator group.
+
+I HAVE SHOWN THEM HERE AS THEY WILL BE DELETED TODAY AFTER THIS PROJECT
+- Acess key   AKIASWLIU2NL5EHL73YA
+
+- Secret Key   ThrFCPui9DlN8H57JVPc+gnYJtykdeHagOk+Lh4a
+
+
+#### Retrieve an authentication token and authenticate your Docker client to your registry.
+Use the AWS CLI:
+```
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/c8v1l0n9
+```
+#### Note: If you receive an error using the AWS CLI, make sure that you have the latest version of the AWS CLI and Docker installed.
+Build your Docker image using the following command. For information on building a Docker file from scratch see the instructions here . You can skip this step if your image is already built:
+```
+docker build -t deleonabowu/continuous-serve-image .
+```
+####After the build completes, tag your image so you can push the image to this repository:
+```
+docker tag deleonabowu/continuous-serve-image:latest public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+```
+#### Run the following command to push this image to your newly created AWS repository:
+```
+docker push public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+```
+
+```
+aws --version
+
+aws-cli/2.9.0 Python/3.9.11 Windows/10 exe/AMD64 prompt/off
+
+```
+
+#### We need to configure the AWS client to use our AWS credentials to access AWS resources(ECR)
+
+```
+aws configure
+```
+
+#### login from command line
+```
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/c8v1l0n9
+```
+```
+$ aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/c8v1l0n9
+Login Succeeded
+```
+#### Logging in with your password grants your terminal complete access to your account.
+For better security, log in with a limited-privilege personal access token. Learn more at https://docs.docker.com/go/access-tokens/ 
+
+#### Next I build the Docker Image
+```
+docker build -t deleonabowu/continuous-serve-image .
+```
+#### The next thing is to tag the image to specify that it isn't going to the default dockerhub repository but ECR
+
+```
+docker tag deleonabowu/continuous-serve-image:latest public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+```
+
+
+#### Now that it is built locally and tagged, I will push it to amazon ECR
+```
+$ docker push public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+The push refers to repository [public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image]
+936d43cd91d5: Layer already exists
+7c322f3d99a0: Pushed
+a0e83da8ee49: Layer already exists
+797d12bcfeb4: Layer already exists
+8ca8a587d4f0: Layer already exists
+158b630f9dde: Layer already exists
+397a239a053b: Layer already exists
+89c3244a87b2: Pushed
+80231db1194c: Layer already exists
+f1c1f2298584: Layer already exists
+ccba29d69370: Layer already exists
+latest: digest: sha256:1b0ec48706ca06b0df5e0ebd35920fd943930c5df0b6c741af190e80fefb68cb size: 2633
+```
+
+![ecr image1](./images/ecrimage1.PNG)
+
+#### Now i will sync my localrepository with the git repository as we made local changes setting up the git action
+
+```
+git pull origin main
+```
+```
+$ git pull origin main
+remote: Enumerating objects: 6, done.
+remote: Counting objects: 100% (6/6), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 5 (delta 1), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (5/5), 936 bytes | 12.00 KiB/s, done.
+From github.com:deleonab/continuous-deployment-docker-serve-image
+ * branch            main       -> FETCH_HEAD
+   441f291..90596bb  main       -> origin/main
+Merge made by the 'ort' strategy.
+ .github/workflows/docker-image.yml | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100644 .github/workflows/docker-image.yml
+ ```
