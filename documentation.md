@@ -458,3 +458,20 @@ jobs:
 
 ![image URI](./images/ecrimage2.PNG)
 
+####
+- 
+```
+docker run --name=RCR-hosted-serve-container -d -p=3001:3000 public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+```
+
+#### Check in browser
+
+![image URI](./images/browser2.PNG)
+
+```
+docker run --name=RCR-hosted-serve-container -d -p=3001:3000 public.ecr.aws/c8v1l0n9/deleonabowu/continuous-serve-image:latest
+ec38cf0a1dc1a561bad67689243a582a90ccabc9151fb0149f1f7e566bf22c5c
+
+```
+
+#### END OF PROJECT
