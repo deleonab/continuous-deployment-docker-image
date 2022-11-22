@@ -453,3 +453,8 @@ jobs:
 
 ![github report1](./images/github1.PNG)
 
+
+#### We can use the image URI to run a container
+
+![image URI](./images/ecrimage2.PNG)
+
