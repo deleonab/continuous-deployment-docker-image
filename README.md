@@ -1,2 +1,2 @@
 ##### Set up a continuous deployment workflow with Github actions and Amazon ECR to automatically create new image builds for a Docker Project. Test done by Creating a serve image to serve a static web application using nodeJS
-k
+--- 
